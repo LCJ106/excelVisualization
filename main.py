@@ -119,12 +119,38 @@ def show_visual(df):
     sheets = list(df.keys())
     print(sheets)
     policy = df[sheets[0]]
+    departments = policy["科室/单位"].drop_duplicates()
+    # 导航栏
+    st.sidebar.markdown("""
+    <style>
+    /* 去掉蓝色，改成黑色，去掉下划线 */
+    .stSidebar a {
+        color: #111111 !important;
+        text-decoration: none !important;
+        font-size: 14px;
+    }
+    /* 鼠标悬浮变灰色 */
+    .stSidebar a:hover {
+        color: #444444 !important;
+        background: #f0f2f6;
+        border-radius: 5px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    st.sidebar.markdown("## 🏢 科室导航")
+    icons = ["📌", "📋", "📎", "📊", "📍", "📁", "📂", "✅", "📌", "📋"]
+    for id, dept_name in enumerate(departments):
+        icon = icons[id % len(icons)]
+        # div id，用于绑定; #为函数要求的前缀在 div id之前
+        sid_link = f"#dept_{dept_name}"
+        st.sidebar.markdown(f"[{dept_name}]({sid_link})")
     policy_group = policy.groupby("科室/单位")
     for id, (dept_name, group) in enumerate(policy_group):
+
         st.markdown(f'<div id="dept_{dept_name}"></div>', unsafe_allow_html=True)
         for index, row in group.iterrows():
             show_card(row, dept_name, is_blue=(id % 2 == 0))
-    departments = policy["科室/单位"].drop_duplicates()
+
 
     # # 自动交替颜色
     # for i, dept in enumerate(departments):
