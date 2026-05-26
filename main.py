@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 from pathlib import Path
+import openpyxl
 
 # ===================== 【1】页面配置 =====================
 st.set_page_config(
